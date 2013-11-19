@@ -1,0 +1,2680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+		<title>PHP ActiveRecord - An easy to use ORM for PHP</title>
+		<link rel="canonical" href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="issue,bug,tracker">
+		<meta name="description" content="Redmine">
+		<meta name="googlebot" content="NOODP">
+		<meta name="robots" content="index,follow,noodp,noydir">
+		<link href="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/screen.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/print.css" media="print" rel="stylesheet" type="text/css">
+		<!--[if lt IE 8]><link href="/stylesheets/blueprint/ie.css?1366183229" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
+		<link href="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/application.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/jstoolbar.css" media="screen" rel="stylesheet" type="text/css">
+		<!--[if IE]>
+		    <style type="text/css">
+		      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+		      body {behavior: url(/stylesheets/csshover.htc?1366183229);}
+		    </style>
+		<![endif]-->
+		
+		<!-- page specific tags -->
+				<link href="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/main.css" media="screen" rel="stylesheet" type="text/css">
+	</head>
+<body>
+	
+<div id="wrapper">
+	<div id="header">
+	    <div class="container">
+	        <div class="span-7">
+	            <h1><a href="http://www.phpactiverecord.org/" target="_top">php.activerecord</a></h1>
+	        </div>
+	        <div class="span-13" id="main-nav">
+		        <ul class="horizontal"><li><a href="http://www.phpactiverecord.org/download/index/main" class="download">Download</a></li>
+<li><a href="http://www.phpactiverecord.org/projects/main/wiki" class="guides">Wiki</a></li>
+<li><a href="http://www.phpactiverecord.org/docs/index/main" class="docs selected">Docs</a></li>
+<li><a href="http://www.phpactiverecord.org/news/index/main?project_id=main" class="news">News</a></li>
+<li><a href="http://www.phpactiverecord.org/projects/main/boards" class="boards">Forums</a></li>
+<li><a href="http://www.phpactiverecord.org/welcome/about/main" class="about-us">About us</a></li></ul>	        </div>
+          <div class="span-4 last" id="account-menu">
+		        <ul class="horizontal"><li><a href="http://www.phpactiverecord.org/login" class="login">Sign in</a></li>
+<li><a href="http://www.phpactiverecord.org/account/register" class="register">Register</a></li></ul>          </div>
+	    </div>
+	</div>
+
+	<div id="main-frame">
+		<div id="breadcrumbs" class="container">
+			<ul class="span-24 last">
+				<li><a href="http://www.phpactiverecord.org/">Home</a></li><li><a href="http://www.phpactiverecord.org/docs">Docs</a></li><li class="last"><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a></li>
+			</ul>
+		</div>
+
+		<div id="main" class="container">
+			<div id="content" class="span-16 colborder">
+				
+				<pre></pre>
+
+
+
+
+												
+
+
+
+
+<h3 id="class_details">Class Details</h3>
+<div class="block">
+	<div class="content">
+		<p>The base class for your models.</p>		<p></p><p>Defining an ActiveRecord model for a table called people and orders:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">CREATE</span> <span class="co">TABLE</span> people(
+   id <span class="pt">int</span> primary <span class="pd">key</span> auto_increment,
+   parent_id <span class="pt">int</span>,
+   first_name varchar(<span class="i">50</span>),
+   last_name varchar(<span class="i">50</span>)
+ );
+
+ <span class="co">CREATE</span> <span class="co">TABLE</span> orders(
+   id <span class="pt">int</span> primary <span class="pd">key</span> auto_increment,
+   person_id <span class="pt">int</span> not <span class="pc">null</span>,
+   cost decimal(<span class="i">10</span>,<span class="i">2</span>),
+   total decimal(<span class="i">10</span>,<span class="i">2</span>)
+ );
+
+	</pre>
+</div><p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">Person</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+   <span class="r">static</span> <span class="lv">$belongs_to</span> = <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">parent</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">foreign_key</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">parent_id</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">class_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Person</span><span class="dl">'</span></span>)
+   );
+
+   <span class="r">static</span> <span class="lv">$has_many</span> = <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">children</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">foreign_key</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">parent_id</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">class_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Person</span><span class="dl">'</span></span>),
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">orders</span><span class="dl">'</span></span>)
+   );
+
+   <span class="r">static</span> <span class="lv">$validates_length_of</span> = <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">first_name</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">within</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="i">1</span>,<span class="i">50</span>)),
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">last_name</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">within</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="i">1</span>,<span class="i">50</span>))
+   );
+ }
+
+ <span class="r">class</span> <span class="cl">Order</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+   <span class="r">static</span> <span class="lv">$belongs_to</span> = <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">person</span><span class="dl">'</span></span>)
+   );
+
+   <span class="r">static</span> <span class="lv">$validates_numericality_of</span> = <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">cost</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">greater_than</span><span class="dl">'</span></span> =&gt; <span class="i">0</span>),
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">total</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">greater_than</span><span class="dl">'</span></span> =&gt; <span class="i">0</span>)
+   );
+
+   <span class="r">static</span> <span class="lv">$before_save</span> = <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">calculate_total_with_tax</span><span class="dl">'</span></span>);
+
+   <span class="r">public</span> <span class="r">function</span> <span class="fu">calculate_total_with_tax</span>() {
+     <span class="lv">$this</span>-&gt;total = <span class="lv">$this</span>-&gt;cost * <span class="fl">0.045</span>;
+   }
+ }
+
+	</pre>
+</div><p></p><p>For a more in-depth look at defining models, relationships, callbacks and many other things  please consult our <a href="http://www.phpactiverecord.org/guides">Guides</a>.</p><p></p>
+				<div class="box">
+			<ul>
+												<li>
+					<b>see:</b>
+					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a>
+				</li>
+																<li>
+					<b>see:</b>
+					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Validations">Validations</a>
+				</li>
+																<li>
+					<b>see:</b>
+					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/HasAndBelongsToMany">HasAndBelongsToMany</a>
+				</li>
+																<li>
+					<b>see:</b>
+					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/HasMany">HasMany</a>
+				</li>
+																<li>
+					<b>see:</b>
+					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/CallBack">CallBack</a>
+				</li>
+																<li>
+					<b>see:</b>
+					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/BelongsTo">BelongsTo</a>
+				</li>
+											</ul>
+		</div>
+			</div>
+</div>
+
+<hr>
+<h3 id="class_vars">Class Variables</h3>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$alias_attribute">
+		<div class="docs-icon"></div>
+		public
+		static		array $alias_attribute
+		= <em>array()</em>	</h5>
+	<!--
+	<p>[line 173]</p>
+	-->
+
+	<div class="content">
+		<p>Allows you to create aliases for attributes.</p>
+
+
+<p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">Person</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+   <span class="r">static</span> <span class="lv">$alias_attribute</span> = <span class="pd">array</span>(
+     <span class="s"><span class="dl">'</span><span class="k">alias_first_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">first_name</span><span class="dl">'</span></span>,
+     <span class="s"><span class="dl">'</span><span class="k">alias_last_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">last_name</span><span class="dl">'</span></span>);
+ }
+
+ <span class="lv">$person</span> = <span class="co">Person</span>::first();
+ <span class="lv">$person</span>-&gt;alias_first_name = <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>;
+ <span class="pd">echo</span> <span class="lv">$person</span>-&gt;alias_first_name;
+
+	</pre>
+</div><p></p><p></p>	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$attr_accessible">
+		<div class="docs-icon"></div>
+		public
+		static		array $attr_accessible
+		= <em>array()</em>	</h5>
+	<!--
+	<p>[line 195]</p>
+	-->
+
+	<div class="content">
+		<p>Whitelist of attributes that are checked from mass-assignment calls such as constructing a model or using update_attributes.</p>
+
+
+<p></p><p>This is the opposite of <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$attr_protected">$attr_protected</a>.</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">Person</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+   <span class="r">static</span> <span class="lv">$attr_accessible</span> = <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">first_name</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">last_name</span><span class="dl">'</span></span>);
+ }
+
+ <span class="lv">$person</span> = <span class="r">new</span> <span class="co">Person</span>(<span class="pd">array</span>(
+   <span class="s"><span class="dl">'</span><span class="k">first_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>,
+   <span class="s"><span class="dl">'</span><span class="k">last_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">the Grief</span><span class="dl">'</span></span>,
+   <span class="s"><span class="dl">'</span><span class="k">id</span><span class="dl">'</span></span> =&gt; <span class="i">11111</span>));
+
+ <span class="pd">echo</span> <span class="lv">$person</span>-&gt;id; <span class="c"># =&gt; null</span>
+
+	</pre>
+</div><p></p><p></p>	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$attr_protected">
+		<div class="docs-icon"></div>
+		public
+		static		array $attr_protected
+		= <em>array()</em>	</h5>
+	<!--
+	<p>[line 207]</p>
+	-->
+
+	<div class="content">
+		<p>Blacklist of attributes that cannot be mass-assigned.</p>
+
+
+<p></p><p>This is the opposite of <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$attr_accessible">$attr_accessible</a> and the format  for defining these are exactly the same.</p><p>If the attribute is both accessible and protected, it is treated as protected.</p><p></p>	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$connection">
+		<div class="docs-icon"></div>
+		public
+		static		string $connection
+			</h5>
+	<!--
+	<p>[line 123]</p>
+	-->
+
+	<div class="content">
+		<p>Set to the name of the connection this <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a> should use.</p>
+
+
+	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$db">
+		<div class="docs-icon"></div>
+		public
+		static		string $db
+			</h5>
+	<!--
+	<p>[line 130]</p>
+	-->
+
+	<div class="content">
+		<p>Set to the name of the database this Model's table is in.</p>
+
+
+	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$delegate">
+		<div class="docs-icon"></div>
+		public
+		static		array $delegate
+		= <em>array()</em>	</h5>
+	<!--
+	<p>[line 231]</p>
+	-->
+
+	<div class="content">
+		<p>Delegates calls to a relationship.</p>
+
+
+<p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">Person</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+   <span class="r">static</span> <span class="lv">$belongs_to</span> = <span class="pd">array</span>(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">venue</span><span class="dl">'</span></span>),<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">host</span><span class="dl">'</span></span>));
+   <span class="r">static</span> <span class="lv">$delegate</span> = <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">state</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">to</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">venue</span><span class="dl">'</span></span>),
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">to</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">host</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">prefix</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">woot</span><span class="dl">'</span></span>));
+ }
+
+	</pre>
+</div><p></p><p>Can then do:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="lv">$person</span>-&gt;state     <span class="c"># same as calling $person-&gt;venue-&gt;state</span>
+ <span class="lv">$person</span>-&gt;name      <span class="c"># same as calling $person-&gt;venue-&gt;name</span>
+ <span class="lv">$person</span>-&gt;woot_name <span class="c"># same as calling $person-&gt;host-&gt;name</span>
+
+	</pre>
+</div><p></p><p></p>	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$errors">
+		<div class="docs-icon"></div>
+		public
+				<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Errors">Errors</a> $errors
+			</h5>
+	<!--
+	<p>[line 81]</p>
+	-->
+
+	<div class="content">
+		<p>An instance of <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Errors">Errors</a> and will be instantiated once a write method is called.</p>
+
+
+	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$primary_key">
+		<div class="docs-icon"></div>
+		public
+		static		string $primary_key
+			</h5>
+	<!--
+	<p>[line 147]</p>
+	-->
+
+	<div class="content">
+		<p>Set this to override the default primary key name if different from default name of "id".</p>
+
+
+	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$sequence">
+		<div class="docs-icon"></div>
+		public
+		static		string $sequence
+			</h5>
+	<!--
+	<p>[line 154]</p>
+	-->
+
+	<div class="content">
+		<p>Set this to explicitly specify the sequence name for the table.</p>
+
+
+	</div>
+</div>
+<div class="block class-variable collapsible collapsed">
+	<h5 class="trigger" id="var$table_name">
+		<div class="docs-icon"></div>
+		public
+		static		string $table_name
+			</h5>
+	<!--
+	<p>[line 140]</p>
+	-->
+
+	<div style="display: none;" class="content">
+		<p>Set this to explicitly specify the model's table name if different from inferred name.</p>
+
+
+<p></p><p>If your table doesn't follow our table name convention you can
+ set this to the  name of your table to explicitly tell ActiveRecord 
+what your table is called.</p><p></p>	</div>
+</div>
+<div class="block class-variable collapsible expanded">
+	<h5 class="trigger" id="var$VALID_OPTIONS">
+		<div class="docs-icon"></div>
+		public
+		static		array $VALID_OPTIONS
+		= <em>array('conditions', 'limit', 'offset', 'order', 'select', 'joins', 'include', 'readonly', 'group', 'from', 'having')</em>	</h5>
+	<!--
+	<p>[line 1266]</p>
+	-->
+
+	<div class="content">
+		<p>A list of valid finder options.</p>
+
+
+	</div>
+</div>
+
+<hr>
+<h3 id="class_methods">Class Methods</h3>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__construct">
+		<div class="docs-icon"></div>
+		public
+				<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		__construct
+		<em>(
+																	[					
+					$attributes
+					 = array()]									,					[					boolean
+					$guard_attributes
+					 = true]									,					[					boolean
+					$instantiating_via_find
+					 = false]									,					[					boolean
+					$new_record
+					 = true]									)</em>
+	</h5>
+	<div class="content">
+		<p>Constructs a model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$attributes</b> -
+			Hash containing names and values to mass assign to the model
+		</li>
+				<li>
+			boolean
+			<b>$guard_attributes</b> -
+			Set to true to guard protected/non-accessible attributes
+		</li>
+				<li>
+			boolean
+			<b>$instantiating_via_find</b> -
+			Set to true if this model is being created from a find call
+		</li>
+				<li>
+			boolean
+			<b>$new_record</b> -
+			Set to true if this should be considered a new record
+		</li>
+			</ul>
+</div>
+
+
+<p></p><p>When a user instantiates a new object (e.g.: it was not 
+ActiveRecord that instantiated via a find)  then @var $attributes will 
+be mapped according to the schema's defaults. Otherwise, the given  
+$attributes will be mapped via set_attributes_via_mass_assignment.</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">new</span> <span class="co">Person</span>(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">first_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">last_name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">the Grief</span><span class="dl">'</span></span>));
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodall">
+		<div class="docs-icon"></div>
+		public
+		static 		array
+		all
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Alias for self::find('all').</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			array of records found
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodassign_attribute">
+		<div class="docs-icon"></div>
+		public
+				mixed
+		assign_attribute
+		<em>(
+																						string
+					$name
+														,										
+					$value
+														,										mixed
+					&amp;$value
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Assign a value to an attribute.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			Name of the attribute
+		</li>
+				<li>
+			mixed
+			<b>&amp;$value</b> -
+			Value of the attribute
+		</li>
+				<li>
+			
+			<b>$value</b> -
+			
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			the attribute value
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodattributes">
+		<div class="docs-icon"></div>
+		public
+				array
+		attributes
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Returns a copy of the model's attributes hash.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			A copy of the model's attribute data
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodattribute_is_dirty">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		attribute_is_dirty
+		<em>(
+																						string
+					$attribute
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Check if a particular attribute has been modified since loading the model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$attribute</b> -
+			Name of the attribute
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			TRUE if it has been modified.
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodconnection">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Connection">Connection</a>
+		connection
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Retrieve the connection for this model.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodcount">
+		<div class="docs-icon"></div>
+		public
+		static 		int
+		count
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Get a count of qualifying records.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			Number of records that matched the query
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+									</ul>
+</div>
+
+<p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::<span class="pd">count</span>(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">amount &gt; 3.14159265</span><span class="dl">'</span></span>));
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodcreate">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		create
+		<em>(
+																						array
+					$attributes
+														,					[					boolean
+					$validate
+					 = true]									)</em>
+	</h5>
+	<div class="content">
+		<p>Creates a model and saves it to the database.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$attributes</b> -
+			Array of the models attributes
+		</li>
+				<li>
+			boolean
+			<b>$validate</b> -
+			True if the validators should be run
+		</li>
+			</ul>
+</div>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methoddelete">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		delete
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Deletes this model from the database and returns true if successful.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methoddelete_all">
+		<div class="docs-icon"></div>
+		public
+		static 		void
+		delete_all
+		<em>(
+																	[					
+					$options
+					 = array()]									)</em>
+	</h5>
+	<div class="content">
+		<p>Deletes records matching conditions in $options</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			
+			<b>$options</b> -
+			
+		</li>
+			</ul>
+</div>
+
+
+<p></p><p>Does not instantiate models and therefore does not invoke callbacks</p><p>Delete all using a hash:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::delete_all(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>)));
+
+	</pre>
+</div><p></p><p>Delete all using an array:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::delete_all(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name = ?</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>)));
+
+	</pre>
+</div><p></p><p>Delete all using a string:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::delete_all(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">name = "Tito"));
+</span></span>
+	</pre>
+</div><p></p><p>An options array takes the following parameters:</p><p></p><ul><li><strong>conditions:</strong> Conditions using a string/hash/array</li><li><strong>limit:</strong> Limit number of records to delete (MySQL &amp; Sqlite only)</li><li><strong>order:</strong> A SQL fragment for ordering such as: 'name asc', 'id desc, name asc' (MySQL &amp; Sqlite only)</li></ul><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methoddirty_attributes">
+		<div class="docs-icon"></div>
+		public
+				mixed
+		dirty_attributes
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Returns hash of attributes that have been modified since loading the model.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			null if no dirty attributes otherwise returns array of dirty attributes.
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodexists">
+		<div class="docs-icon"></div>
+		public
+		static 		boolean
+		exists
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Determine if a record exists.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+									</ul>
+</div>
+
+<p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">SomeModel</span>::exists(<span class="i">123</span>);
+ <span class="co">SomeModel</span>::exists(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">id=? and name=?</span><span class="dl">'</span></span>, <span class="i">123</span>, <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>)));
+ <span class="co">SomeModel</span>::exists(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">id</span><span class="dl">'</span></span> =&gt; <span class="i">123</span>, <span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>));
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodextract_and_validate_options">
+		<div class="docs-icon"></div>
+		public
+		static 		array
+		extract_and_validate_options
+		<em>(
+																						
+					&amp;$array
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Pulls out the options hash from $array if any.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>&amp;$array</b> -
+			An array
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			A valid options array
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodfind">
+		<div class="docs-icon"></div>
+		public
+		static 		mixed
+		find
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Find records in the database.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An array of records found if doing a find_all otherwise a    single 
+Model object or null if it wasn't found. NULL is only return when    
+doing a first/last find. If doing an all find and no records matched 
+this    will return an empty array.
+		</li>
+								<li>
+			<b>throws:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/RecordNotFound">RecordNotFound</a> if no options are passed or finding by pk and no records matched
+		</li>
+									</ul>
+</div>
+
+<p></p><p>Finding by the primary key:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="c"># queries for the model with id=123</span>
+ <span class="co">YourModel</span>::find(<span class="i">123</span>);
+
+ <span class="c"># queries for model with id in(1,2,3)</span>
+ <span class="co">YourModel</span>::find(<span class="i">1</span>,<span class="i">2</span>,<span class="i">3</span>);
+
+ <span class="c"># finding by pk accepts an options array</span>
+ <span class="co">YourModel</span>::find(<span class="i">123</span>,<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">order</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">name desc</span><span class="dl">'</span></span>));
+
+	</pre>
+</div><p></p><p>Finding by using a conditions array:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">first</span><span class="dl">'</span></span>, <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name=?</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>),
+   <span class="s"><span class="dl">'</span><span class="k">order</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">name asc</span><span class="dl">'</span></span>))
+ <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">all</span><span class="dl">'</span></span>, <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">amount &gt; 3.14159265</span><span class="dl">'</span></span>));
+ <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">all</span><span class="dl">'</span></span>, <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">conditions</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">id in(?)</span><span class="dl">'</span></span>, <span class="pd">array</span>(<span class="i">1</span>,<span class="i">2</span>,<span class="i">3</span>))));
+
+	</pre>
+</div><p></p><p>Finding by using a hash:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::find(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">id</span><span class="dl">'</span></span> =&gt; <span class="i">1</span>));
+ <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">first</span><span class="dl">'</span></span>,<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">id</span><span class="dl">'</span></span> =&gt; <span class="i">1</span>));
+ <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">all</span><span class="dl">'</span></span>,<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">id</span><span class="dl">'</span></span> =&gt; <span class="i">1</span>));
+
+	</pre>
+</div><p></p><p>An options array can take the following parameters:</p><p></p><ul><li><strong>select:</strong> A SQL fragment for what fields to return such as: '*', 'people.*', 'first_name, last_name, id'</li><li><strong>joins:</strong> A SQL join fragment such as: 'JOIN roles ON(roles.user_id=user.id)' or a named association on the model</li><li><strong>include:</strong> TODO not implemented yet</li><li><strong>conditions:</strong> A SQL fragment such as: 'id=1', array('id=1'), array('name=? and id=?','Tito',1), array('name IN(?)', array('Tito','Bob')),
+ array('name' =&gt; 'Tito', 'id' =&gt; 1)</li><li><strong>limit:</strong> Number of records to limit the query to</li><li><strong>offset:</strong> The row offset to return results from for the query</li><li><strong>order:</strong> A SQL fragment for order such as: 'name asc', 'name asc, id desc'</li><li><strong>readonly:</strong> Return all the models in readonly mode</li><li><strong>group:</strong> A SQL group by fragment</li></ul><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodfind_by_pk">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		find_by_pk
+		<em>(
+																						array
+					$values
+														,										array
+					$options
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Finder method which will find by a single or array of primary keys for this model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$values</b> -
+			An array containing values for the pk
+		</li>
+				<li>
+			array
+			<b>$options</b> -
+			An options array
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+								<li>
+			<b>throws:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/RecordNotFound">RecordNotFound</a> if a record could not be found
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodfind_by_sql">
+		<div class="docs-icon"></div>
+		public
+		static 		array
+		find_by_sql
+		<em>(
+																						string
+					$sql
+														,					[					array
+					$values
+					 = null]									)</em>
+	</h5>
+	<div class="content">
+		<p>Find using a raw SELECT query.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$sql</b> -
+			The raw SELECT query
+		</li>
+				<li>
+			array
+			<b>$values</b> -
+			An array of values for any parameters that needs to be bound
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An array of models
+		</li>
+									</ul>
+</div>
+
+<p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::find_by_sql(<span class="s"><span class="dl">"</span><span class="k">SELECT * FROM people WHERE name=?</span><span class="dl">"</span></span>,<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>));
+ <span class="co">YourModel</span>::find_by_sql(<span class="s"><span class="dl">"</span><span class="k">SELECT * FROM people WHERE name='Tito'</span><span class="dl">"</span></span>);
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodfirst">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		first
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Alias for self::find('first').</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			The first matched record or null if not found
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodflag_dirty">
+		<div class="docs-icon"></div>
+		public
+				void
+		flag_dirty
+		<em>(
+																						string
+					$name
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Flags an attribute as dirty.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			Attribute name
+		</li>
+			</ul>
+</div>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodget_primary_key">
+		<div class="docs-icon"></div>
+		public
+				string
+		get_primary_key
+		<em>(
+																	[					boolean
+					$first
+					 = false]									)</em>
+	</h5>
+	<div class="content">
+		<p>Retrieve the primary key name.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			boolean
+			<b>$first</b> -
+			Set to true to return the first value in the pk array only
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			The primary key for the model
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodget_real_attribute_name">
+		<div class="docs-icon"></div>
+		public
+				string
+		get_real_attribute_name
+		<em>(
+																						string
+					$name
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Returns the actual attribute name if $name is aliased.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			An attribute name
+		</li>
+			</ul>
+</div>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodget_validation_rules">
+		<div class="docs-icon"></div>
+		public
+				array
+		get_validation_rules
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Returns array of validator data for this Model.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An array containing validator data for this model.
+		</li>
+									</ul>
+</div>
+
+<p></p><p>Will return an array looking like:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="pd">array</span>(
+   <span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">validator</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">validates_presence_of</span><span class="dl">'</span></span>),
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">validator</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">validates_inclusion_of</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">in</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">Bob</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">Joe</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">John</span><span class="dl">'</span></span>)),
+   <span class="s"><span class="dl">'</span><span class="k">password</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(
+     <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">validator</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">validates_length_of</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">minimum</span><span class="dl">'</span></span> =&gt; <span class="i">6</span>))
+   )
+ );
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodget_values_for">
+		<div class="docs-icon"></div>
+		public
+				array
+		get_values_for
+		<em>(
+																						array
+					$attributes
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Returns an associative array containing values for all the attributes in $attributes</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$attributes</b> -
+			Array containing attribute names
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			A hash containing $name =&gt; $value
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodis_dirty">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		is_dirty
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Returns true if the model has been modified.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			true if modified
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodis_invalid">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		is_invalid
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Runs validations and returns true if invalid.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_valid">Model::is_valid()</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodis_new_record">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		is_new_record
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Determine if the model is a new record.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodis_options_hash">
+		<div class="docs-icon"></div>
+		public
+		static 		boolean
+		is_options_hash
+		<em>(
+																						array
+					$array
+														,					[					bool
+					$throw
+					 = true]									)</em>
+	</h5>
+	<div class="content">
+		<p>Determines if the specified array is a valid ActiveRecord options array.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$array</b> -
+			An options array
+		</li>
+				<li>
+			bool
+			<b>$throw</b> -
+			True to throw an exception if not valid
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			True if valid otherwise valse
+		</li>
+								<li>
+			<b>throws:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/ActiveRecordException">ActiveRecordException</a> if the array contained any invalid options
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodis_readonly">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		is_readonly
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Determine if the model is in read-only mode.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodis_valid">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		is_valid
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Run validations on model and returns whether or not model passed validation.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_invalid">Model::is_invalid()</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodlast">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		last
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Alias for self::find('last')</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			The last matched record or null if not found
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodpk_conditions">
+		<div class="docs-icon"></div>
+		public
+		static 		array
+		pk_conditions
+		<em>(
+																						mixed
+					$args
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Returns a hash containing the names =&gt; values of the primary key.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			mixed
+			<b>$args</b> -
+			Primary key value(s)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An array in the form array(name =&gt; value, ...)
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodquery">
+		<div class="docs-icon"></div>
+		public
+		static 		object A
+		query
+		<em>(
+																						string
+					$sql
+														,					[					array
+					$values
+					 = null]									)</em>
+	</h5>
+	<div class="content">
+		<p>Helper method to run arbitrary queries against the model's database connection.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$sql</b> -
+			SQL to execute
+		</li>
+				<li>
+			array
+			<b>$values</b> -
+			Bind values, if any, for the query
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			PDOStatement object
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodreadonly">
+		<div class="docs-icon"></div>
+		public
+				void
+		readonly
+		<em>(
+																	[					boolean
+					$readonly
+					 = true]									)</em>
+	</h5>
+	<div class="content">
+		<p>Flag model as readonly.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			boolean
+			<b>$readonly</b> -
+			Set to true to put the model into readonly mode
+		</li>
+			</ul>
+</div>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodread_attribute">
+		<div class="docs-icon"></div>
+		public
+				mixed
+		&amp;read_attribute
+		<em>(
+																						string
+					$name
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Retrieves an attribute's value or a relationship object based on 
+the name passed. If the attribute  accessed is 'id' then it will return 
+the model's primary key no matter what the actual attribute name is  for
+ the primary key.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			Name of an attribute
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			The value of the attribute
+		</li>
+								<li>
+			<b>throws:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/UndefinedPropertyException">UndefinedPropertyException</a> if name could not be resolved to an attribute, relationship, ...
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodreestablish_connection">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Connection">Connection</a>
+		reestablish_connection
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Re-establishes the database connection with a new connection.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodreload">
+		<div class="docs-icon"></div>
+		public
+				<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		reload
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Reloads the attributes and relationships of this object from the database.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodreset_dirty">
+		<div class="docs-icon"></div>
+		public
+				void
+		reset_dirty
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Resets the dirty array.</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methoddirty_attributes">Model::dirty_attributes()</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodsave">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		save
+		<em>(
+																	[					boolean
+					$validate
+					 = true]									)</em>
+	</h5>
+	<div class="content">
+		<p>Save the model to the database.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			boolean
+			<b>$validate</b> -
+			Set to true or false depending on if you want the validators to run or not
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			True if the model was saved to the database otherwise false
+		</li>
+									</ul>
+</div>
+
+<p></p><p>This function will automatically determine if an INSERT or 
+UPDATE needs to occur.  If a validation or a callback for this model 
+returns false, then the model will  not be saved and this will return 
+false.</p><p>If saving an existing model only data that has changed will be saved.</p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodset_attributes">
+		<div class="docs-icon"></div>
+		public
+				void
+		set_attributes
+		<em>(
+																						
+					$attributes
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Mass update the model with data from an attributes hash.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$attributes</b> -
+			An array containing data to update in the form array(name =&gt; value, ...)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodupdate_attributes">Model::update_attributes()</a>
+		</li>
+									</ul>
+</div>
+
+<p></p><p>Unlike update_attributes() this method only updates the model's data  but DOES NOT save it to the database.</p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodset_relationship_from_eager_load">
+		<div class="docs-icon"></div>
+		public
+				void
+		set_relationship_from_eager_load
+		<em>(
+																	[					<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+					$model
+					 = null]									,										$name
+					$name
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Add a model to the given named ($name) relationship.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+			<b>$model</b> -
+			
+		</li>
+				<li>
+			$name
+			<b>$name</b> -
+			of relationship for this table
+		</li>
+			</ul>
+</div>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodset_timestamps">
+		<div class="docs-icon"></div>
+		public
+				void
+		set_timestamps
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Updates a model's timestamps.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodtable">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Table">Table</a>
+		table
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Returns the <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Table">Table</a> object for this model.</p>
+
+
+<p></p><p>Be sure to call in static scoping: static::table()</p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodtable_name">
+		<div class="docs-icon"></div>
+		public
+		static 		string
+		table_name
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Retrieves the name of the table for this Model.</p>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodto_array">
+		<div class="docs-icon"></div>
+		public
+				array
+		to_array
+		<em>(
+																	[					
+					$options
+					 = array()]									)</em>
+	</h5>
+	<div class="content">
+		<p>Returns an Array representation of this model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$options</b> -
+			An array containing options for json serialization (see <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a> for valid options)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			Array representation of the model
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodto_csv">
+		<div class="docs-icon"></div>
+		public
+				string
+		to_csv
+		<em>(
+																	[					
+					$options
+					 = array()]									)</em>
+	</h5>
+	<div class="content">
+		<p>Returns an CSV representation of this model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$options</b> -
+			An array containing options for csv serialization (see <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a> for valid options)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			CSV representation of the model
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a>
+		</li>
+									</ul>
+</div>
+
+<p></p><p>Can take optional delimiter and enclosure  (defaults are , and double quotes)</p><p>Ex:  </p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">ActiveRecord</span>\<span class="co">CsvSerializer</span>::<span class="lv">$delimiter</span>=<span class="s"><span class="dl">'</span><span class="k">;</span><span class="dl">'</span></span>;
+ <span class="co">ActiveRecord</span>\<span class="co">CsvSerializer</span>::<span class="lv">$enclosure</span>=<span class="s"><span class="dl">'</span><span class="dl">'</span></span>;
+ <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">first</span><span class="dl">'</span></span>)-&gt;to_csv(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">only</span><span class="dl">'</span></span>=&gt;<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">level</span><span class="dl">'</span></span>)));
+ <span class="la">returns</span>: <span class="co">Joe</span>,<span class="i">2</span>
+
+ <span class="co">YourModel</span>::find(<span class="s"><span class="dl">'</span><span class="k">first</span><span class="dl">'</span></span>)-&gt;to_csv(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">only_header</span><span class="dl">'</span></span>=&gt;<span class="pc">true</span>,<span class="s"><span class="dl">'</span><span class="k">only</span><span class="dl">'</span></span>=&gt;<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">level</span><span class="dl">'</span></span>)));
+ <span class="la">returns</span>: name,level
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodto_json">
+		<div class="docs-icon"></div>
+		public
+				string
+		to_json
+		<em>(
+																	[					
+					$options
+					 = array()]									)</em>
+	</h5>
+	<div class="content">
+		<p>Returns a JSON representation of this model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$options</b> -
+			An array containing options for json serialization (see <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a> for valid options)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			JSON representation of the model
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodto_xml">
+		<div class="docs-icon"></div>
+		public
+				string
+		to_xml
+		<em>(
+																	[					
+					$options
+					 = array()]									)</em>
+	</h5>
+	<div class="content">
+		<p>Returns an XML representation of this model.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$options</b> -
+			An array containing options for xml serialization (see <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a> for valid options)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			XML representation of the model
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Serialization">Serialization</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodtransaction">
+		<div class="docs-icon"></div>
+		public
+		static 		boolean
+		transaction
+		<em>(
+																						Closure
+					$closure
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Executes a block of code inside a database transaction.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			Closure
+			<b>$closure</b> -
+			The closure to execute. To cause a rollback have your closure return false or throw an exception.
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			True if the transaction was committed, False if rolled back.
+		</li>
+									</ul>
+</div>
+
+<p></p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::transaction(<span class="r">function</span>()
+ {
+   <span class="co">YourModel</span>::create(<span class="pd">array</span>(<span class="s"><span class="dl">"</span><span class="k">name</span><span class="dl">"</span></span> =&gt; <span class="s"><span class="dl">"</span><span class="k">blah</span><span class="dl">"</span></span>));
+ });
+
+	</pre>
+</div><p></p><p>If an exception is thrown inside the closure the 
+transaction will  automatically be rolled back. You can also return 
+false from your  closure to cause a rollback:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::transaction(<span class="r">function</span>()
+ {
+   <span class="co">YourModel</span>::create(<span class="pd">array</span>(<span class="s"><span class="dl">"</span><span class="k">name</span><span class="dl">"</span></span> =&gt; <span class="s"><span class="dl">"</span><span class="k">blah</span><span class="dl">"</span></span>));
+   <span class="r">throw</span> <span class="r">new</span> <span class="pc">Exception</span>(<span class="s"><span class="dl">"</span><span class="k">rollback!</span><span class="dl">"</span></span>);
+ });
+
+ <span class="co">YourModel</span>::transaction(<span class="r">function</span>()
+ {
+   <span class="co">YourModel</span>::create(<span class="pd">array</span>(<span class="s"><span class="dl">"</span><span class="k">name</span><span class="dl">"</span></span> =&gt; <span class="s"><span class="dl">"</span><span class="k">blah</span><span class="dl">"</span></span>));
+   <span class="r">return</span> <span class="pc">false</span>; <span class="c"># rollback!</span>
+ });
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodupdate_all">
+		<div class="docs-icon"></div>
+		public
+		static 		void
+		update_all
+		<em>(
+																	[					
+					$options
+					 = array()]									)</em>
+	</h5>
+	<div class="content">
+		<p>Updates records using set in $options</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			
+			<b>$options</b> -
+			
+		</li>
+			</ul>
+</div>
+
+
+<p></p><p>Does not instantiate models and therefore does not invoke callbacks</p><p>Update all using a hash:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::update_all(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">set</span><span class="dl">'</span></span> =&gt; <span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">"</span><span class="k">Bob</span><span class="dl">"</span></span>)));
+
+	</pre>
+</div><p></p><p>Update all using a string:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">YourModel</span>::update_all(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">set</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">name = "Bob"</span><span class="dl">'</span></span>));
+
+	</pre>
+</div><p></p><p>An options array takes the following parameters:</p><p></p><ul><li><strong>set:</strong> String/hash of field names and their values to be updated with</li><li><strong>conditions:</strong> Conditions using a string/hash/array</li><li><strong>limit:</strong> Limit number of records to update (MySQL &amp; Sqlite only)</li><li><strong>order:</strong> A SQL fragment for ordering such as: 'name asc', 'id desc, name asc' (MySQL &amp; Sqlite only)</li></ul><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodupdate_attribute">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		update_attribute
+		<em>(
+																						string
+					$name
+														,										mixed
+					$value
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Updates a single attribute and saves the record without going through the normal validation procedure.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			Name of attribute
+		</li>
+				<li>
+			mixed
+			<b>$value</b> -
+			Value of the attribute
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			True if successful otherwise false
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodupdate_attributes">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		update_attributes
+		<em>(
+																						array
+					$attributes
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Mass update the model with an array of attribute data and saves to the database.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$attributes</b> -
+			An attribute data array in the form array(name =&gt; value, ...)
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			True if successfully updated and saved otherwise false
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodvalues_for">
+		<div class="docs-icon"></div>
+		public
+				array
+		values_for
+		<em>(
+																						array
+					$attribute_names
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Helper to return a hash of values for the specified attributes.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			array
+			<b>$attribute_names</b> -
+			Array of attribute names
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An array in the form array(name =&gt; value, ...)
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="methodvalues_for_pk">
+		<div class="docs-icon"></div>
+		public
+				array
+		values_for_pk
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		<p>Helper that creates an array of values for the primary key(s).</p>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An array in the form array(key_name =&gt; value, ...)
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__call">
+		<div class="docs-icon"></div>
+		public
+				mixed
+		__call
+		<em>(
+																						string
+					$method
+														,										mixed
+					$args
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Enables the use of build|create for associations.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$method</b> -
+			Name of method
+		</li>
+				<li>
+			mixed
+			<b>$args</b> -
+			Method args
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			An instance of a given <a href="http://www.phpactiverecord.org/docs/ActiveRecord/AbstractRelationship">AbstractRelationship</a>
+		</li>
+									</ul>
+</div>
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__callStatic">
+		<div class="docs-icon"></div>
+		public
+		static 		<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>
+		__callStatic
+		<em>(
+																						string
+					$method
+														,										mixed
+					$args
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Enables the use of dynamic finders.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$method</b> -
+			Name of method
+		</li>
+				<li>
+			mixed
+			<b>$args</b> -
+			Method args
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">Model::find()</a>
+		</li>
+								<li>
+			<b>throws:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/ActiveRecordException">ActiveRecordException</a> if invalid query
+		</li>
+									</ul>
+</div>
+
+<p></p><p>Dynamic finders are just an easy way to do queries quickly without having to  specify an options array with conditions in it.</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">SomeModel</span>::find_by_first_name(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>);
+ <span class="co">SomeModel</span>::find_by_first_name_and_last_name(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">the Grief</span><span class="dl">'</span></span>);
+ <span class="co">SomeModel</span>::find_by_first_name_or_last_name(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">the Grief</span><span class="dl">'</span></span>);
+ <span class="co">SomeModel</span>::find_all_by_last_name(<span class="s"><span class="dl">'</span><span class="k">Smith</span><span class="dl">'</span></span>);
+ <span class="co">SomeModel</span>::count_by_name(<span class="s"><span class="dl">'</span><span class="k">Bob</span><span class="dl">'</span></span>)
+ <span class="co">SomeModel</span>::count_by_name_or_state(<span class="s"><span class="dl">'</span><span class="k">Bob</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">VA</span><span class="dl">'</span></span>)
+ <span class="co">SomeModel</span>::count_by_name_and_state(<span class="s"><span class="dl">'</span><span class="k">Bob</span><span class="dl">'</span></span>,<span class="s"><span class="dl">'</span><span class="k">VA</span><span class="dl">'</span></span>)
+
+	</pre>
+</div><p></p><p>You can also create the model if the find call returned no results:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">Person</span>::find_or_create_by_name(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>);
+
+ <span class="c"># would be the equivalent of</span>
+ <span class="r">if</span> (!<span class="co">Person</span>::find_by_name(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>))
+   <span class="co">Person</span>::create(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>));
+
+	</pre>
+</div><p></p><p>Some other examples of find_or_create_by:</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="co">Person</span>::find_or_create_by_name_and_id(<span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>,<span class="i">1</span>);
+ <span class="co">Person</span>::find_or_create_by_name_and_id(<span class="pd">array</span>(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span> =&gt; <span class="s"><span class="dl">'</span><span class="k">Tito</span><span class="dl">'</span></span>, <span class="s"><span class="dl">'</span><span class="k">id</span><span class="dl">'</span></span> =&gt; <span class="i">1</span>));
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__clone">
+		<div class="docs-icon"></div>
+		public
+				void
+		__clone
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__get">
+		<div class="docs-icon"></div>
+		public
+				mixed
+		&amp;__get
+		<em>(
+																						string
+					$name
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Magic method which delegates to read_attribute(). This handles 
+firing off getter methods,  as they are not checked/invoked inside of 
+read_attribute(). This circumvents the problem with  a getter being 
+accessed with the same name as an actual attribute.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			Name of an attribute
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			The value of the attribute
+		</li>
+								<li>
+			<b>see:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodread_attribute">Model::read_attribute()</a>
+		</li>
+									</ul>
+</div>
+
+<p></p><p>You can also define customer getter methods for the model.</p><p>EXAMPLE:  </p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">User</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+
+   <span class="c"># define custom getter methods. Note you must</span>
+   <span class="c"># prepend get_ to your method name:</span>
+   <span class="r">function</span> <span class="fu">get_middle_initial</span>() {
+     <span class="r">return</span> <span class="lv">$this</span>-&gt;middle_name{<span class="i">0</span>};
+   }
+ }
+
+ <span class="lv">$user</span> = <span class="r">new</span> <span class="co">User</span>();
+ <span class="pd">echo</span> <span class="lv">$user</span>-&gt;middle_name;  <span class="c"># will call $user-&gt;get_middle_name()</span>
+
+	</pre>
+</div><p></p><p>If you define a custom getter with the same name as an 
+attribute then you  will need to use read_attribute() to get the 
+attribute's value.  This is necessary due to the way __get() works.</p><p>For example, assume 'name' is a field on the table and we're defining a  custom getter for 'name':</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">User</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+
+   <span class="c"># INCORRECT way to do it</span>
+   <span class="c"># function get_name() {</span>
+   <span class="c">#   return strtoupper($this-&gt;name);</span>
+   <span class="c"># }</span>
+
+   <span class="r">function</span> <span class="fu">get_name</span>() {
+     <span class="r">return</span> <span class="pd">strtoupper</span>(<span class="lv">$this</span>-&gt;read_attribute(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span>));
+   }
+ }
+
+ <span class="lv">$user</span> = <span class="r">new</span> <span class="co">User</span>();
+ <span class="lv">$user</span>-&gt;name = <span class="s"><span class="dl">'</span><span class="k">bob</span><span class="dl">'</span></span>;
+ <span class="pd">echo</span> <span class="lv">$user</span>-&gt;name; <span class="c"># =&gt; BOB</span>
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__isset">
+		<div class="docs-icon"></div>
+		public
+				boolean
+		__isset
+		<em>(
+																						string
+					$attribute_name
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Determines if an attribute exists for this <a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model">Model</a>.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$attribute_name</b> -
+			
+		</li>
+			</ul>
+</div>
+
+
+
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__set">
+		<div class="docs-icon"></div>
+		public
+				mixed
+		__set
+		<em>(
+																						string
+					$name
+														,										mixed
+					$value
+														)</em>
+	</h5>
+	<div class="content">
+		<p>Magic allows un-defined attributes to set via $attributes.</p>
+<div class="box parameters">
+	<ul>
+				<li>
+			string
+			<b>$name</b> -
+			Name of attribute, relationship or other to set
+		</li>
+				<li>
+			mixed
+			<b>$value</b> -
+			The value
+		</li>
+			</ul>
+</div>
+
+<div class="box">
+	<ul>
+						<li>
+			<b>return:</b>
+			The value
+		</li>
+								<li>
+			<b>throws:</b>
+			<a href="http://www.phpactiverecord.org/docs/ActiveRecord/UndefinedPropertyException">UndefinedPropertyException</a> if $name does not exist
+		</li>
+									</ul>
+</div>
+
+<p></p><p>You can also define customer setter methods for the model.</p><p>EXAMPLE:  </p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">User</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+
+   <span class="c"># define custom setter methods. Note you must</span>
+   <span class="c"># prepend set_ to your method name:</span>
+   <span class="r">function</span> <span class="fu">set_password</span>(<span class="lv">$plaintext</span>) {
+     <span class="lv">$this</span>-&gt;encrypted_password = <span class="pd">md5</span>(<span class="lv">$plaintext</span>);
+   }
+ }
+
+ <span class="lv">$user</span> = <span class="r">new</span> <span class="co">User</span>();
+ <span class="lv">$user</span>-&gt;password = <span class="s"><span class="dl">'</span><span class="k">plaintext</span><span class="dl">'</span></span>;  <span class="c"># will call $user-&gt;set_password('plaintext')</span>
+
+	</pre>
+</div><p></p><p>If you define a custom setter with the same name as an 
+attribute then you  will need to use assign_attribute() to assign the 
+value to the attribute.  This is necessary due to the way __set() works.</p><p>For example, assume 'name' is a field on the table and we're defining a  custom setter for 'name':</p><p></p><div class="php" style="font-family: monospace;">
+	<pre class="del"> <span class="r">class</span> <span class="cl">User</span> <span class="r">extends</span> <span class="co">ActiveRecord</span>\<span class="co">Model</span> {
+
+   <span class="c"># INCORRECT way to do it</span>
+   <span class="c"># function set_name($name) {</span>
+   <span class="c">#   $this-&gt;name = strtoupper($name);</span>
+   <span class="c"># }</span>
+
+   <span class="r">function</span> <span class="fu">set_name</span>(<span class="lv">$name</span>) {
+     <span class="lv">$this</span>-&gt;assign_attribute(<span class="s"><span class="dl">'</span><span class="k">name</span><span class="dl">'</span></span>,<span class="pd">strtoupper</span>(<span class="lv">$name</span>));
+   }
+ }
+
+ <span class="lv">$user</span> = <span class="r">new</span> <span class="co">User</span>();
+ <span class="lv">$user</span>-&gt;name = <span class="s"><span class="dl">'</span><span class="k">bob</span><span class="dl">'</span></span>;
+ <span class="pd">echo</span> <span class="lv">$user</span>-&gt;name; <span class="c"># =&gt; BOB</span>
+
+	</pre>
+</div><p></p><p></p>
+	</div>
+</div>
+<div class="block method collapsible expanded">
+	<h5 class="trigger" id="method__wakeup">
+		<div class="docs-icon"></div>
+		public
+				void
+		__wakeup
+		<em>(
+					)</em>
+	</h5>
+	<div class="content">
+		
+
+
+
+	</div>
+</div>
+
+
+				
+			</div>
+
+			<div id="sidebar" class="span-7 last">
+				<div class="r-button" id="stable-build">
+					<a href="http://www.phpactiverecord.org/download">Get Stable Build - <em>v1.0</em><p>June 27 2010</p></a>
+				</div>
+				<div class="r-button" id="nightly-build">
+					<a href="http://www.phpactiverecord.org/download">Get Nightly Build <p>August  4, 2013</p></a>
+				</div>
+		
+				
+
+				<h2 id="news-header">
+	<a href="http://www.phpactiverecord.org/news">Latest News</a>
+	<a class="feed" href="http://www.phpactiverecord.org/projects/main/news.atom"><img src="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/feed-icon-14x14.png"></a>
+</h2>
+
+<ul id="news-summary" class="icon-list">
+	
+	<li class="article">
+		<a href="http://www.phpactiverecord.org/news/6-website-downtime">Website Downtime</a>
+		
+		<div class="meta">
+			<em class="relative" title="2011-09-26T16:43:49Z">about a year ago</em> ago
+			
+		</div>
+		
+	</li>
+	
+	<li class="article">
+		<a href="http://www.phpactiverecord.org/news/5-did-you-know-php-ar-has-eager-loading">Did you know? PHP-AR has Eager Loading</a>
+		
+		<div class="meta">
+			<em class="relative" title="2010-08-31T23:31:08Z">2 years ago</em> ago
+			
+		</div>
+		
+	</li>
+	
+	<li class="article">
+		<a href="http://www.phpactiverecord.org/news/4-php-activerecord-1-0-released">php-activerecord 1.0 released!</a>
+		
+		<div class="meta">
+			<em class="relative" title="2010-06-28T00:02:55Z">3 years ago</em> ago
+			
+		</div>
+		
+	</li>
+	
+	<li class="article">
+		<a href="http://www.phpactiverecord.org/news/3-website-updated-with-forums-and-wiki">Website updated with forums and wiki</a>
+		
+		<div class="meta">
+			<em class="relative" title="2010-06-18T21:37:23Z">3 years ago</em> ago
+			
+		</div>
+		
+	</li>
+	
+	<li class="article">
+		<a href="http://www.phpactiverecord.org/news/2-php-activerecord-1-0-rc1-released">php-activerecord 1.0 RC1 released!</a>
+		
+		<div class="meta">
+			<em class="relative" title="2010-04-07T00:00:15Z">3 years ago</em> ago
+			
+		</div>
+		
+	</li>
+	
+</ul>
+
+
+
+
+				<h2><a href="http://www.phpactiverecord.org/projects/main/activity">Recent Activity</a></h2>
+<ul id="recent-activity" class="icon-list">
+		<li class="message">
+	  
+		<a href="http://www.phpactiverecord.org/boards/1/topics/1938-re-my-experience-with-activerecord">I've just found the solution to my problem above. The charset should be specified...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/2089">Nuita S</a>
+			<em class="relative" title="2013-08-09T12:39:23Z">about 8 hours ago</em>
+		</div>
+	</li>
+		<li class="message">
+	  
+		<a href="http://www.phpactiverecord.org/boards/1/topics/1937-re-re-my-experience-with-activerecord">If CRUD is nothing fancy, then can you tell me why I can't even read a simple col...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/2089">Nuita S</a>
+			<em class="relative" title="2013-08-09T11:58:05Z">about 9 hours ago</em>
+		</div>
+	</li>
+		<li class="message">
+	  
+		<a href="http://www.phpactiverecord.org/boards/4/topics/1936-prevent-inserting-duplicate-entry">Is there any way to ignore inserting duplicate entry on a table? How can I apply ...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/2136">Hamid Ghorashi</a>
+			<em class="relative" title="2013-08-05T07:50:26Z">4 days ago</em>
+		</div>
+	</li>
+		<li class="message">
+	  
+		<a href="http://www.phpactiverecord.org/boards/4/topics/1935-relation-failing-on-table-name-with-_">I've an existing project in Code Igniter with HMVC extension. Also using php-acti...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/2130">Kapil Sharma</a>
+			<em class="relative" title="2013-08-02T10:42:05Z">7 days ago</em>
+		</div>
+	</li>
+		<li class="message">
+	  
+		<a href="http://www.phpactiverecord.org/boards/1/topics/1934-re-my-experience-with-activerecord">Hello there,
+
+PHPActiveRecord is really easy to learn but you really need to un...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/2129">Guillem CANAL</a>
+			<em class="relative" title="2013-08-02T10:16:32Z">7 days ago</em>
+		</div>
+	</li>
+		<li class="commit">
+	  
+		<a href="http://github.com/kla/php-activerecord/commit/96100175f2c268648a6b9fad3157620a6a6649d1">Merge pull request #284 from fetch/test-require-fix
+
+Using __DIR__ in require_onc...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/3">Jacques Fuentes</a>
+			<em class="relative" title="2013-04-15T13:09:16Z">3 months ago</em>
+		</div>
+	</li>
+		<li class="commit">
+	  
+		<a href="http://github.com/kla/php-activerecord/commit/f8220bfaaf820f53d99e3c97b97b4a5ee2a0adfe">absolute path require_once</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/1660">Koen Punt</a>
+			<em class="relative" title="2013-04-15T08:07:39Z">3 months ago</em>
+		</div>
+	</li>
+		<li class="commit">
+	  
+		<a href="http://github.com/kla/php-activerecord/commit/17eb9c6155ae3fb8ac144ab07ee828a19a8be9c1">Re #282, pointing phpunit at the tests...</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/show/David%20Rogers%20">David Rogers </a>
+			<em class="relative" title="2013-04-11T20:39:30Z">4 months ago</em>
+		</div>
+	</li>
+		<li class="commit">
+	  
+		<a href="http://github.com/kla/php-activerecord/commit/ec53c90187577c9671fd16a1a96979aed067b8cf">Driving tests with phpunit.xml re #282</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/show/David%20Rogers%20">David Rogers </a>
+			<em class="relative" title="2013-04-11T20:26:29Z">4 months ago</em>
+		</div>
+	</li>
+		<li class="commit">
+	  
+		<a href="http://github.com/kla/php-activerecord/commit/d8c90b6a640da93539ec0e758e60800fcee9bc8a">Create .travis.yml to drive Travis CI build</a>
+		
+		<div class="author">
+			by <a href="http://www.phpactiverecord.org/users/show/David%20Rogers%20">David Rogers </a>
+			<em class="relative" title="2013-04-11T19:39:42Z">4 months ago</em>
+		</div>
+	</li>
+	</ul>
+
+
+				
+<h2><a href="#class_vars">Class Variables</a></h2>
+<ul>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$alias_attribute">$alias_attribute</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$attr_accessible">$attr_accessible</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$attr_protected">$attr_protected</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$connection">$connection</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$db">$db</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$delegate">$delegate</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$errors">$errors</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$primary_key">$primary_key</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$sequence">$sequence</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$table_name">$table_name</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#var$VALID_OPTIONS">$VALID_OPTIONS</a></li>
+	</ul>
+
+
+<h2><a href="#class_methods">Methods</a></h2>
+<ul>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__construct">__construct</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodall">all</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodassign_attribute">assign_attribute</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodattributes">attributes</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodattribute_is_dirty">attribute_is_dirty</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodconnection">connection</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodcount">count</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodcreate">create</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methoddelete">delete</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methoddelete_all">delete_all</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methoddirty_attributes">dirty_attributes</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodexists">exists</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodextract_and_validate_options">extract_and_validate_options</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind">find</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind_by_pk">find_by_pk</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfind_by_sql">find_by_sql</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodfirst">first</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodflag_dirty">flag_dirty</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodget_primary_key">get_primary_key</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodget_real_attribute_name">get_real_attribute_name</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodget_validation_rules">get_validation_rules</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodget_values_for">get_values_for</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_dirty">is_dirty</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_invalid">is_invalid</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_new_record">is_new_record</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_options_hash">is_options_hash</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_readonly">is_readonly</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodis_valid">is_valid</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodlast">last</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodpk_conditions">pk_conditions</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodquery">query</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodreadonly">readonly</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodread_attribute">read_attribute</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodreestablish_connection">reestablish_connection</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodreload">reload</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodreset_dirty">reset_dirty</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodsave">save</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodset_attributes">set_attributes</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodset_relationship_from_eager_load">set_relationship_from_eager_load</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodset_timestamps">set_timestamps</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodtable">table</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodtable_name">table_name</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodto_array">to_array</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodto_csv">to_csv</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodto_json">to_json</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodto_xml">to_xml</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodtransaction">transaction</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodupdate_all">update_all</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodupdate_attribute">update_attribute</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodupdate_attributes">update_attributes</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodvalues_for">values_for</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#methodvalues_for_pk">values_for_pk</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__call">__call</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__callStatic">__callStatic</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__clone">__clone</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__get">__get</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__isset">__isset</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__set">__set</a></li>
+		<li><a href="http://www.phpactiverecord.org/docs/ActiveRecord/Model#method__wakeup">__wakeup</a></li>
+	</ul>
+
+				
+			</div>
+		</div>
+	</div>
+
+	<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+
+	<div id="footer">
+	    <div class="container">
+	        <div class="span-24 last">
+			    <ul class="horizontal">
+	<li><a href="http://www.phpactiverecord.org/">Home</a></li>
+	<li><a href="http://www.phpactiverecord.org/download/index/main">Download</a></li>
+	<li><a href="http://www.phpactiverecord.org/projects/main/wiki">Wiki</a></li>
+	<li><a href="http://www.phpactiverecord.org/docs">Documentation</a></li>
+	<li><a href="http://github.com/kla/php-activerecord/issues">Issues</a></li><a href="http://www.phpactiverecord.org/news">News</a>
+	<li><a href="http://www.phpactiverecord.org/projects/main/boards">Forums</a></li>
+	<li class="last"><a href="http://www.phpactiverecord.org/welcome/about">About Us</a></li>
+</ul>
+<p>
+	<a href="http://www.phpactiverecord.org/" target="_top">phpactiverecord.org - An easy to use ORM for PHP</a><br>
+	<a href="http://www.opensource.org/licenses/mit-license.php">MIT License</a>
+</p>
+
+	        </div>
+	    </div>
+	</div>
+</div>
+
+
+<script src="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/core.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script src="PHP%20ActiveRecord%20-%20An%20easy%20to%20use%20ORM%20for%20PHP_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">try { var pageTracker = _gat._getTracker("UA-10078176-1"); pageTracker._trackPageview();} catch(err) {}</script>
+
+
+
+
+
+</body></html>

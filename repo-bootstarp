@@ -1,0 +1,13 @@
+#!/bin/bash
+HM=$(pwd)
+sh iMVC-Clone-Script
+sh Data-Clone-Script
+cd iMVC/DB
+sh DB-PAR-Clone-Script
+cd "$HM"
+cd "public/access/rte"
+sh Bootstrap-wysiwyg-Clone-Script
+cd "$HM"
+echo 
+echo
+echo "DONE"

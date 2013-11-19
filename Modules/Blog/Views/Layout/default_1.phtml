@@ -1,0 +1,27 @@
+<?php require 'layout.header.php' ?>
+<div class="row-fluid">
+    <?php if(User::IsLoggedIn() && $this->GetLayoutName()==='default') : ?>
+    <div class="span2">
+        <?php 
+            # load folder explorer
+            echo '<legend>Folder 3xplorer</legend>';
+            $fr = new \iMVC\Routing\FakeRequest("/folder/explorer", $_GET, array("ajax"=>1 , 'cwd'=>str_replace("Action", "", $this->view->request->action)));
+            echo $fr->Send(1);
+        ?>
+    </div>
+    <?php endif;?>
+    <div class="span10 inline" style="min-height: 500px;">
+        <?php if(false && !User::IsLoggedIn() && $this->GetLayoutName()==='default') : ?>
+        <ul class="pull-right inline" style="list-style: none;">
+            <li>
+                <a href="/auth/signup" >You can always join us.</a>
+            </li>
+        </ul>
+        <?php endif; ?>
+        <div class="" style="clear:both;"> 
+                <?php require 'layout.cat.php'; ?>
+                <?php echo $this->content ?>
+        </div>
+    </div>
+ </div>
+<?php require 'layout.footer.php' ?>

@@ -1,0 +1,9 @@
+<?php
+$type = substr($this->request->TYPE, 0, strlen($this->request->TYPE)-1);
+$type = $type=='htm'?'note':'';
+$action = '/'.str_replace("Action", "", $this->request->action);
+$uri = explode('.',$this->request->requestURI);
+$uri = $uri[0].".".$type."s";
+if($action=='/'  || strtolower($action)=='/index') $action = '';
+if(!isset($this->request->params['o'])) $this->request->params['o'] = 0; 
+if(!isset($this->request->params['l'])) $this->request->params['l'] = 1; 

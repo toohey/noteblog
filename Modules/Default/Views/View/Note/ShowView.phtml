@@ -1,0 +1,21 @@
+<?php require 'type-tag-helper.phtml'; ?>
+<link href="/access/css/fuzzy-style.css" rel="stylesheet">
+<div id='fuzzy-env'></div>
+<?php 
+    require 'pop-alert.js.php';
+    require 'helpers/delete.js.php';
+?>
+<div class='modal fade span11' id='fuzzy-content'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" class='pull-left'><?php echo $this->note->note_name ?></h4>
+                <?php require 'helpers/actions.js.php'; ?>
+            </div>
+        </div>
+    </div>  
+    <div class='clear'></div>
+    <div style='position: relative;height: 89%;overflow: auto;margin:10px;'<?php //style='margin-top: 60px;padding: 10px;text-align: justify' ?> data-spy="scroll" data-target=".modal-header" data-offset="0" class="scrollspy-example" >
+        <?php echo $this->note->note_body ?>
+    </div>
+</div>

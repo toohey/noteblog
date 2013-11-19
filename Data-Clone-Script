@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Cloning from online repository..." 
+rm ./Data -fr
+git clone git@github.com:dariushha/NoteBlog-Data.git -v
+mv NoteBlog-Data Data
+echo "Cloning all branches ..."
+cd Data
+for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+    git branch --track ${branch##*/} $branch
+done
+git pull --all
+echo "Done!"
+cd ..
+

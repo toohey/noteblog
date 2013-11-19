@@ -1,0 +1,25 @@
+<div>    
+    <script>
+        $('form#create-folder-form').submit(function($e){
+            $e.preventDefault();
+            $.post($('form#create-folder-form').attr('action')+'&ajax',
+                    $('form#create-folder-form').serialize(), 
+                    function(data) {
+                        $("#create-box").modal("hide");
+                        if(data.length)
+                            modalAlert(data, undefined, function(){
+                                Reload("folder");
+                            });
+                        else
+                            Reload("folder");
+                    });
+        });
+    </script>
+    <form action="/folder/create?<?php echo $this->GetSecureGET(array($this->p, User::GetInstance()->user_id)); ?>" id='create-folder-form' method="post">
+        <input type='hidden' name='p' value='<?php echo $this->p ?>' />
+        <div class="input-append span12" style='margin-left: 6px;'>
+            <input class="span10" style='' id="appendedInputButton" type="text" maxlength="75" name="folder_name" placeholder="Enter folder's name" required="" >
+            <button class="btn btn-primary" type="submit">Create</button>
+        </div>
+    </form>
+</div>

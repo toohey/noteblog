@@ -1,0 +1,31 @@
+<?php 
+    $this->options->no_header = true; 
+    //$this->options->no_style = true; 
+?>
+<?php require 'layout.header.php' ?>
+    <link href="/access/css/fuzzy-style.css" rel="stylesheet">
+    <div class="container-fluid row-fluid fuzzy">
+        <div id='fuzzy-env'></div> 
+
+        <div class='modal fade span11' id='fuzzy-content'>
+            <div class='imodal-dialog'>
+                <div class='imodal-content'>
+                    <?php if(isset($this->view->header)): ?>
+                    <div class='imodal-header' style="margin: 10px;">
+                        <?php echo $this->view->header; ?>
+                    </div>
+                    <hr style="margin: 10px;"/>
+                    <?php endif; ?>
+                    <div class="imodal-body" style="margin: 10px;">
+                        <?php echo $this->view->body; ?>
+                    </div>
+                    <?php if(isset($this->view->footer)): ?>
+                    <div class="imodal-footer form-actions">
+                        <?php echo $this->view->footer; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+    </div>
+</div>
+<?php require 'layout.footer.php'; ?>

@@ -1,0 +1,9 @@
+<?php 
+    $this->options->no_header = true; 
+    $this->options->no_style = true; 
+?>
+<?php require 'layout.header.php' ?>
+<div class="container-fluid row-fluid">
+    <?php echo $this->content; ?>
+</div>
+<?php require 'layout.footer.php'; ?>

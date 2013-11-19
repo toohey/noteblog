@@ -1,0 +1,133 @@
+<?php if(!$this->reloading):?>
+<link href="/access/css/fuzzy-style.css" rel="stylesheet">
+<div class="row-fluid fuzzy" id="move-content">
+    <div id='fuzzy-env' onclick="//alert('close');"></div> 
+    <div class='modal fade span11' id='fuzzy-content' style="max-height: 60%;width: 53%;overflow: auto;top:14%;left:21%">
+        <div class='imodal-dialog'>
+            <div class='imodal-content' style="padding: 10px;background-color: #FFF">
+                <div clas="wide">
+                    <div class="pull-left"><b>Move ...</b></div>
+                    <button class="btn btn-primary pull-right " id="close-btn" onclick="$('#move-content').remove();">Close</button>
+                    <div class="clear" ></div>
+                    <hr style=";" />
+                </div>
+            </div>
+            <div class="imodal-body" style="">
+                <?php endif ; ?>
+                <div style="min-height: 50px;" id="move-folder-explorer">
+                    <?php if(!isset($this->parent)): ?>
+                    <div class="alert alert-danger text-center">
+                        No root!
+                    </div>
+                    <?php return; endif;?>
+                <style>
+                    #move-nav .tab{margin-left: 40px;}
+                    ul#move-nav  > li{height: 20px;padding: 10px;}
+                    ul#move-nav  > li.valid:hover{background-color: #E6E6E6;border: 1px solid #A5A5A5}
+                    ul#move-nav  > li.valid, 
+                    div#move-folder-explorer a.move-item, 
+                    ul#move-nav  > li.parent:hover{cursor: pointer} 
+                    ul#move-nav  > li.invalid:hover{background-color: #FCF8E3;border: 1px solid #FBEED5;cursor: no-drop}
+                </style>
+                <script>
+                        $(document).ready(function(){
+                           $('*[data-toggle="tooltip"]').tooltip(); 
+                        });
+                        function Dive($this)
+                        {
+                            $("ul#move-nav").css("opacity", 0.3).slideUp();
+                            $("img#wait-img").show();
+                            $id = $this.attr('folder-id');
+                            $.ajax({
+                                url:'/folder/move.dive?<?php echo $this->ajax?"ajax&":""?>p=<?php echo $this->p?>&t=<?php echo $this->t?><?php echo $this->GetSecureGET(array($this->p, $this->t, User::GetInstance()->user_id))?>', 
+                                type:"POST", 
+                                data:"<?php echo $this->file ?>"+"&d="+$id,
+                                complete:function(data)
+                                {
+                                    $("#fuzzy-env").click();
+                                    $('div#move-folder-explorer').html(data.responseText);
+                                }
+                            });
+                        }
+                       function MoveHere($this)
+                       {
+                           $id = $this.attr('folder-id');
+                            $.ajax({
+                                url:'/folder/move.gc?<?php echo $this->ajax?"ajax&":""?>p=<?php echo $this->p?>&t=<?php echo $this->t?><?php echo $this->GetSecureGET(array($this->p, $this->t, User::GetInstance()->user_id))?>', 
+                                type:"POST", 
+                                data:"<?php echo $this->file ?>"+"&d="+$id,
+                                complete:function(data)
+                                {
+                                    modalAlert(data.responseText);
+                                    if($(data.responseText).hasClass('success'))
+                                        setTimeout(function(){$('.imodal-content #close-btn').click();$('.modal').modal('hide');Reload();},1500);
+                                }
+                            });
+                        }
+                </script>
+                <div style="padding:10px;">
+                    <?php
+                        $map_delimiter = " > ";
+                        echo "<a>Root</a>";
+                        if(!isset($this->map) && count($this->map)) 
+                        {
+                            $this->map = array(Folder::GetRoots_RootFolder());
+                        }
+                        if(!isset($this->map) && count($this->map)) 
+                        {
+                            echo $map_delimiter;
+                            foreach($this->map as $folder)
+                            {
+                                echo "<a>{$folder->folder_name}</a>";
+                                echo $map_delimiter;
+                            }
+                        }
+                ?>
+                </div>
+                    <div class="pull-right" style="margin-right: 15%;margin-top: 1%">
+                        <a class="move-item " folder-id="<?php echo $this->parent->folder_id; ?>" onclick="MoveHere($(this));" style="opacity: 1;z-index: 1;position: absolute"
+                           data-toggle="tooltip" data-placement="top" title="" data-original-title="Move items into '<?php echo isset($this->map) && count($this->map)?$this->map[count($this->map)-1]->folder_name:'Root'?>'">
+                                Move here
+                        </a>
+                    </div>
+                    <ul class="unstyled" id="move-nav" >
+                        <li class="valid parent" onclick="Dive($(this).children('a.back'));" style='opacity: 0.6;'>
+                            <span class="caret pull-left" style="margin-top: 7px;margin-right: 10px;"></span>
+                            <span class="icon-folder-open"></span>
+                            <a class="block back " folder-id="<?php echo $this->parent->parent_id; ?>" >
+                                    ..<?php //echo $this->parent->folder_name; ?>
+                                </a>
+                            <div class="clear"></div>
+                        </li>
+                        <?php $countet = array(); if(!count($this->folders)): ?>
+                        <div class="alert text-center">
+                            No sub-folder here!
+                        </div>
+                        <?php else:?>
+                            <?php foreach($this->folders as $folder): ?>
+                                <?php if(in_array($folder->folder_id, $_POST['file'])): ?>
+                                    <li class="invalid tab" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cannot move into its sub-folder">
+                                        <span class="right-caret pull-left" style="margin-top: 6px;margin-right: 10px;opacity: 0.3"></span>
+                                        <span class="icon-folder-close"></span>
+                                        <a  ><?php echo $folder->folder_name; ?></a>
+                                    </li>
+                                <?php else: ?>
+                                    <li class="tab valid" onclick="Dive($(this));" folder-id="<?php echo $folder->folder_id; ?><?php echo isset($countet[$folder->folder_id])?"_".$countet[$folder->folder_id]++:""?>" >
+                                        <span class="right-caret pull-left" style="margin-top: 6px;margin-right: 10px;opacity: 0.3"></span>
+                                        <span class="icon-folder-close"></span>
+                                        <a class="block dive">
+                                            <?php echo $folder->folder_name; ?>
+                                        </a>
+                                        <div class="clear"></div>
+                                    </li>
+                            <?php $countet[$folder->folder_id] = (!isset($countet[$folder->folder_id])?0:$countet[$folder->folder_id]);endif;endforeach; ?>
+                        <?php  endif; ?>
+                    </ul>
+            </div>
+                <?php if(!$this->reloading): ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+    

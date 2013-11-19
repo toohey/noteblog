@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>iMVC Project Skeleton</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <script src="/access/js/jquery.min.1.9.1.js"></script>
+        <script src="/access/js/modalAlert.js"></script>
+        <?php if(!isset($this->options->no_style) || !$this->options->no_style): ?>
+            <link href="/access/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+            <link href="/access/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+            <script src="/access/bootstrap/js/bootstrap.min.js"></script>
+            <script src="/access/bootstrap/js/tooltip.js"></script>
+            <script>
+                $(document).ready(function(){
+                   $('*[data-toggle="tooltip"]').tooltip(); 
+                });
+            </script>
+        <?php endif; ?>
+        <link href="/access/css/global.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+              <div class="container-fluid" >
+                <div class="navbar">
+                    <ul class="nav">
+                        <li class="active">
+                          <a class="brand" href="/">NoteBlog</a>
+                        </li>
+                        <li class="">
+                          <a href="#">PlaceHolder1</a>
+                        </li>
+                        <li class="">
+                          <a href="#">PlaceHolder2</a>
+                        </li>
+                        <li class="">
+                          <a href="#">PlaceHolder3</a>
+                        </li>
+                        <li class="">
+                          <a href="#">PlaceHolder4</a>
+                        </li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <?php if(\User::IsLoggedIn()) : ?>
+                        <?php 
+                            $fr = new \iMVC\Routing\FakeRequest('/auth/login.info');
+                            try
+                            {
+                                echo $fr->Send(1);
+                            }catch(Exception $e)
+                            {}
+                        ?>
+                        <?php else : ?>
+                        <?php
+                            $login = new iMVC\Routing\FakeRequest('/auth/login.menu');
+                            $signup = new iMVC\Routing\FakeRequest('/auth/signup.menu');
+                            try
+                            {
+                                echo $login->Send(1);
+                            }catch(Exception $e)
+                            {}
+                            try
+                            {
+                                echo $signup->Send(1);
+                            }catch(Exception $e)
+                            {}
+                        ?>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="container-fluid" style="clear: both;margin-top: 40px;"> 
+            <div class="row-fluid">
+                <div class="span12 inline">
+                    <?php echo $this->content ?>
+                </div>
+            </div>
+            <blockquote class="">
+              <p>Believe in yourself! Have faith in your abilities! Without a humble but reasonable confidence in your own powers you cannot be successful or happy.</p>
+              <small>Norman Vincent Peale</small>
+            </blockquote>
+        </div>
+    </body>
+</html>

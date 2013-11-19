@@ -1,0 +1,9 @@
+<?php /*<input type="text" class="span3" style="margin: 0 auto;" data-provide="typeahead" data-items="10"
+       data-source='["Apples","Bananas","Cherries","Dates","Eggplants","Figs","Grapes",
+       "Honeydew","Kiwi","Mango","Peaches","Plums","Raspberries","Strawberries","Watermelon","Zucchini"]'>
+*/?>
+<?php require 'type-tag-helper.phtml'; ?>
+<?php if(!$this->reloading): ?>
+<?php require 'helpers/options/index/options.php' ?>
+<?php endif; ?>
+<?php require 'helpers/index/file-loader.php' ?>

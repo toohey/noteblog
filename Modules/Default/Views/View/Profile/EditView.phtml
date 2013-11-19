@@ -1,0 +1,66 @@
+<?php
+    //ob_start();
+    if(!isset($this->Step))
+        $this->Step = 1;
+    if(!isset($this->post_back))
+        $this->post_back = false;
+?>
+<div class="pre" style="width: 70%;margin:auto;min-height: 200px;font-family: sans-serif;background-color: inherit;padding:10px;">
+    <div style="">
+        <h4 style="border-bottom: 5px solid #0088cc;padding-bottom: 3px;">
+            Create your profile
+        </h4>
+        
+        <style>
+            div#steps{margin-top:5px;font-variant: small-caps;padding: 5px 0 3px 3px;background-color: #fafafa}
+            div#steps div {float: left;width: 50px;height: 30px;padding-top: 5px;text-align: center;}
+            div#steps div a#current{color:#0088cc!important;}
+            div#steps div a{text-decoration: none;color:#c6e2fe}
+        </style>
+        
+        <div id="steps" class="menu form-actions" style="border-bottom: 1px solid #e5e5e5">
+            <?php
+                for($i=1; $i<=3; $i++)
+                {
+                    echo "<div><a ".($i==$this->Step?"id='current'":'').">Step $i</a></div>";
+                    if($i==3)
+                        continue;
+                    echo "<div><b>&gt;</b></div>";
+                }
+            ?>
+            <p class="clear"></p>
+        </div>
+        <style>
+            div#profile-content{margin-top:10px;padding: 10px;}
+            div#profile-content div#submit input{width: 66px}
+        </style>
+        <form action="/profile/edit" method="POST">
+            <input type="hidden" value="<?=$this->Step?>" name="step" />
+            <input type="hidden" value="<?=  \iMVC\Security\Hash::Generate("/user/profile/create/s/$this->Step/hs/".date('Y-M-D').$this->Step.'create')?>" name="hs" />
+            <div id="profile-content">
+<?php
+    $this->post_back = isset($this->post_back) && $this->post_back && isset($this->post) && is_array($this->post);
+    $this->user = User::getInstance(); 
+    switch($this->Step)
+    {
+        case 1:
+        case 2:
+        case 3:
+            require realpath(dirname(__FILE__)."/profile-steps/step{$this->Step}.php");
+            break;
+        default :
+            throw new iMVC\Exceptions\InvalideOperationException("The step: '{$this->Step}' is not defined...");
+    }
+?>
+                <div id="submit" class=" form-actions " style="clear:both;margin: auto -10px auto -10px;">
+                    <input type="submit" name="next"  value="<?=$this->Step==3?'Finish':'Next'?>" class="pull-right btn  btn-primary"/>
+                    <?php if($this->Step>1): ?>
+                        <input type="submit" name="back"  value="Back" class="pull-right btn" style="margin-right:10px;"/>
+                        <input type="submit" name="skip"  value="Skip" class="pull-left btn"/>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<?php //$this->body = ob_get_contents(); ob_end_clean(); ?>

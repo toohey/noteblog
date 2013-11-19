@@ -1,0 +1,15 @@
+[submodule "iMVC"]
+	path = iMVC
+	url = https://github.com/dariushha/zinux.git
+[submodule "public/access/rte/bootstrap-wysiwyg"]
+	path = public/access/rte/bootstrap-wysiwyg
+	url = https://github.com/dariushha/bootstrap-wysiwyg.git
+[submodule "bootstrap-wysiwyg"]
+	path = bootstrap-wysiwyg
+	url = ./public/access/rte/bootstrap-wysiwyg/
+[submodule "iMVC/Mail/PHPMailer"]
+	path = iMVC/Mail/PHPMailer
+	url = https://github.com/dariushha/PHPMailer.git
+[submodule "iMVC/DB/php-activerecord"]
+	path = iMVC/DB/php-activerecord
+	url = https://github.com/dariushha/php-activerecord.git

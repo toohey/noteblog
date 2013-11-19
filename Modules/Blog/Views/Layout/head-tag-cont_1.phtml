@@ -1,0 +1,18 @@
+
+<title>iMVC Project Skeleton</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script src="/access/js/jquery.min.1.9.1.js"></script>
+<script src="/access/js/modalAlert.js"></script>
+<?php if(!isset($this->options->no_style) || !$this->options->no_style): ?>
+    <link href="/access/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/access/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <script src="/access/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/access/bootstrap/js/tooltip.js"></script>
+    <script>
+        $(document).ready(function(){
+           $('*[data-toggle="tooltip"]').tooltip(); 
+        });
+    </script>
+<?php endif; ?>
+<link href="/access/css/global.css" rel="stylesheet"/>

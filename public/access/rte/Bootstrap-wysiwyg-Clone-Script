@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "Cloning from online repository..." 
+rm "./bootstrap-wysiwyg" -fr
+git clone git@github.com:dariushha/bootstrap-wysiwyg.git -v
+echo "Cloning all branches ..."
+cd "./bootstrap-wysiwyg"
+for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+    git branch --track ${branch##*/} $branch
+done
+git pull --all
+echo "Done!"
+cd ..
+

@@ -1,0 +1,28 @@
+<div class="modal-backdrop"></div>
+<div class="modal fade in span5" style="padding: 10px;top:30%;left:28%">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <div class="modal-title text-info"><h3>Reset Zone</h3></div>
+      </div>
+        <div class="modal-body" >
+            <?php
+                switch($this->type)
+                {
+                    case 'html':
+                        require 'reset-versions/html.php';
+                        break;
+                    case 'reset':
+                        require 'reset-versions/reset.php';
+                        break;
+                    case 'configure':
+                        require 'reset-versions/configure.php';
+                        break;
+                    default:
+                        throw new InvalidArgumentException("no view for {$this->type} defined");
+                }
+            ?>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+/* -- Mods for Custom Google Fonts -- */
+
+@import url(http://fonts.googleapis.com/css?family=Lobster+Two|Rochester|Open+Sans:400,300,300italic,400italic,600,600italic|Quattrocento:400,700);
+
+
+body,
+.auth-bio h3 span.profile  {
+	font-family:'Open Sans',arial, sans-serif;
+	font-weight:normal;
+	font-size:13px;
+	line-height:1.6em;
+	}
+
+h1,h2,h3,h4,h5,h6,h7 {
+	font-family: 'Quattrocento',georgia,serif;
+	line-height:1.6em;
+	font-weight:normal;
+	}
+
+#sitetitle .title a {
+	font-family: 'Lobster Two','Rochester','Quattrocento',georgia,serif;
+	line-height:1.6em;
+	font-weight:normal;
+	text-shadow:1px 1px 0 rgba(255,255,255,0.6);
+	font-size:60px;
+	line-height:60px;
+	letter-spacing:0;
+	}
+
+#sitetitle .description {
+	font-size:14px;
+	line-height:14px;
+	letter-spacing:0;
+	text-shadow:0 1px 0px rgba(255,255,255,0.4);
+	}
+
+h2.feature-title,
+h2.feat-title, 
+h3.widgettitle {
+	letter-spacing:0px;
+	font-family:'Open Sans',arial, sans-serif;
+	font-weight:normal;
+	font-size:11pt;
+	}
+
+#contentright,
+#sidebar-narrow,
+#footer-widgets {
+	font-size:12px;
+	line-height:1.5em;
+	}
+
+#commentform input#submit,
+a.more-link, 
+a.more-link:link, 
+a.more-link:visited,
+#searchform #submitbutton,
+p.email-form .subbutton,
+p.email-form .sub,
+#searchform #searchfield  {
+	font-family:'Open Sans',arial, sans-serif;
+	font-weight:bold;
+	font-size:10px;
+	text-transform:uppercase;	
+	}
+
+.widget.sidetabs ul.tabs li a, 
+.widget.sidetabs ul.tabs li a:link, 
+.widget.sidetabs ul.tabs li a:visited  {
+	font-size:10px;
+	text-transform:uppercase;
+	}
+
+#topnav {
+	font-size:10pt;
+	}

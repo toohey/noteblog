@@ -1,0 +1,30 @@
+<script>
+$(document).ready(function(){
+    $('#bookmarks-form input[name="bookmark_name"]').focus().parent().submit(function($e)
+    {
+        $e.preventDefault();
+        $(".modal").modal('hide');
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: $(this).serialize (),
+            complete: function(data){
+                modalAlert (data.responseText);
+                if($(data.responseText).hasClass('success'))
+                    setTimeout(function(){$('.modal').modal('hide');},1500);
+            }
+        });
+    });
+    
+});
+</script>
+<form id='bookmarks-form' action='/bookmark/create.action?<?php echo isset($this->ajax)?"ajax":""?><?php echo $this->h ?>' style="margin-bottom: -30px;" method="POST">
+    <input type="hidden" name="p" value="<?php echo $this->p ?>" >
+    <input type="text" class="input span8" name="bookmark_name" required="" placeholder="Bookmark's title"><br />
+    <input type="text" class="input span12" name="bookmark_body" required="" placeholder="Bookmark's link">
+    <div class="form-actions">
+        <input type="submit" class="btn btn-primary pull-right " style="margin-left: 10px;" value="Bookmark it!">
+        <input type="submit" class="btn btn-default pull-right " value="Close" class="close" data-dismiss="modal" >
+        
+    </div>
+</form>

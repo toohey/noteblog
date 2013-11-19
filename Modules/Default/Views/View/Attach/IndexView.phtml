@@ -1,0 +1,14 @@
+<form id="attach-form" class="form block" style="margin-bottom: -10px;" action="/attach/upload<?php echo isset($this->get)?$this->get:""?>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="h" value="<?php echo $this->h?>" />
+    <input type="hidden" name="p" value="<?php echo $this->p?>" />
+    <input type="hidden" name="t" value="<?php echo $this->t?>" />
+    <p class="alert alert-info text-center">Your file's size should be less than <b><?php echo ini_get("upload_max_filesize")?></b>.</p>
+    <div style="margin:10px;">
+        <input class="inline" type="file" name="file[]" >
+    </div>
+    <textarea style="max-width: 100%" name="dec" class="input input-block-level" placeholder="Some description about upload files (optional)" style="margin:10px auto 10px auto;padding:10px;"></textarea>
+    <div class="form-actions">
+        <input class="btn btn-primary pull-right" style="margin-left: 10px;" type="submit" value="Upload">
+        <input class="btn btn-default pull-right" type="reset" value="Close" data-dismiss="modal">
+    </div>
+</form>

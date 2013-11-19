@@ -1,0 +1,35 @@
+<?php if(!isset($this->version)) $this->version = 1; ?>
+<script type='text/javascript'>
+    $(document).ready(function()
+    {
+        $('form#create-blog-form input[name="blog_name"]').focus();
+        $('form#create-blog-form').submit(function($e)
+        {
+            SubmitFolder();
+            $e.preventDefault();
+        })
+    });
+    function SubmitFolder()
+    {
+        if($('form#create-blog-form input[name="blog_name"]').val().length<5)
+        {
+            modalAlert("<div class='alert alert-error'>Your blog's name's length <b>cannot</b> less than 5 characters</div>");
+            return ;
+        }
+        $.post($('form#create-blog-form').attr('action')+"&ajax",
+                $("form#create-blog-form").serialize(), 
+                function(data) {
+                    $('.modal').modal('hide');
+                    modalAlert(data);
+                });
+
+    }
+</script>
+    
+<form action="/blog/create.action?suppress_layout=<?php echo $this->request->GET['suppress_layout'] ?><?php echo $this->GetSecureGET(array(User::GetInstance()->user_id))?>" id='create-blog-form' method="post">
+        <div class="input-append" style='margin-left: 6px;'>
+            <label>This is a <b>random</b> blog name, you may want to change it!</label>
+            <input class="span12"  style="width: 125%" id="appendedInputButton" type="text" maxlength="50" name="blog_name" placeholder="<?php echo User::GetInstance()->blog->blog_name?>" required="" value='<?php echo User::GetInstance()->blog->blog_name?>''>
+            <button class="btn btn-primary" type="submit">It's Ok</button>
+        </div>
+    </form>

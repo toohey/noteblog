@@ -1,0 +1,52 @@
+/* --- [Blue Color Scheme] --- */
+
+body {
+	background-color:#E5F2FF;
+	}
+
+#topnav,
+#topnav ul ul a {
+	background: #595980;
+	}
+
+#sitetitle .title a,
+#sitetitle .description {
+	color: #333366;
+	}
+
+
+a, a:link, a:visited {
+	color:#007399;
+	}
+
+a:hover, a:active {
+	color:#000000;
+	}
+
+#commentform input#submit,
+a.more-link, 
+a.more-link:link, 
+a.more-link:visited,
+#searchform #submitbutton,
+p.email-form .subbutton {
+	background: #E573AC;
+	border-color: #E573AC;
+	}
+
+#commentform input#submit:hover,
+a.more-link:hover, 
+a.more-link:active,
+#searchform #submitbutton:hover,
+p.email-form .subbutton:hover {
+	background: #595980;
+	border-color: #595980;
+	}
+
+p.foot-creds {
+	background:#595980;
+	}
+
+.flex-control-nav li a:hover,
+.flex-control-nav li a.active {
+	background: #E573AC;
+	}

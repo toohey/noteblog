@@ -1,0 +1,11 @@
+<?php
+    switch($this->type)
+    {
+        case "menu":
+            require 'signup-versions/menu.php';
+            break;
+        default:
+            require 'signup-versions/html.php';
+            break;
+    }
+?>

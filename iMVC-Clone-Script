@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Cloning from online repository..." 
+rm ./iMVC -fr
+git clone -v git@github.com:dariushha/zinux.git iMVC
+echo "Cloning all branches ..."
+cd iMVC
+git reset --hard 78fc0d6764fff74651aebd3debc0cbb163a2acd8
+echo "Done!"
+cd ..
+

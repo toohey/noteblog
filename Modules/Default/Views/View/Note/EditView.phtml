@@ -1,0 +1,56 @@
+<?php require 'type-tag-helper.phtml'; ?>
+<link href="/access/rte/bootstrap-wysiwyg/external/google-code-prettify/prettify.css" rel="stylesheet">
+<script src="/access/rte/bootstrap-wysiwyg/external/jquery.hotkeys.js"></script>
+<script src="/access/rte/bootstrap-wysiwyg/external/google-code-prettify/prettify.js"></script>
+
+<link href="/access/rte/bootstrap-wysiwyg/index.css" rel="stylesheet">
+<script src="/access/rte/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
+
+<link href="/access/rte/bootstrap-wysiwyg/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+<link href="/access/rte/bootstrap-wysiwyg/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="/access/rte/bootstrap-wysiwyg/font-awesome.css" rel="stylesheet">
+<script src="/access/rte/bootstrap-wysiwyg/bootstrap.min.js"></script>
+
+<link href="/access/css/fuzzy-style.css" rel="stylesheet">
+<script>
+    $(document).ready(function(){
+        $('#editor').wysiwyg().bind('DOMSubtreeModified', function(event) {
+            $('textarea[name="note_body"]').html($("#editor").html());
+        });
+        $('#editor input[type="text"]').focus();
+    });
+</script>
+<div id='fuzzy-env'></div> 
+<?php
+    if(isset($this->shared_notif) && $this->shared_notif)
+        $this->notif_content = "Your note has successfully shared with <strong>public</strong>.";
+    require 'pop-alert.js.php';
+    require 'helpers/delete.js.php';
+?>
+<form action="/note/edit?<?php echo $this->GetSecureGET(array($this->note->parent_id, ($this->editting?$this->note->id:$this->editting) ,User::GetInstance()->user_id))?>" method="POST">
+    <input type="hidden" name="p" value="<?php echo $this->note->parent_id ?>" />
+    <?php if($this->editting): ?>
+        <input type="hidden" name="n" value="<?php echo $this->note->id ?>" />
+    <?php endif; ?>
+    <div class='modal fade span11' id='fuzzy-content'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <input class="input-xxlarge input span6 block" type='text' maxlength="150" required="required" placeholder="Your note's title" name='note_title' tabindex="1" value='<?php echo $this->editting?$this->note->note_name:''?>'/>
+                    <?php require 'helpers/actions.js.php'; ?>
+                    <?php require 'helpers/rte.js.php'; ?>
+                </div>
+            </div>
+        </div>  
+        <div class='clear'></div>
+        <div style='margin:10px;height: 75%;'>
+            <textarea style="display: none" name="note_body"><?php echo $this->editting?$this->note->note_body:''?></textarea>
+            <div style='position: relative;height: 94%;overflow: auto;' tabindex="2" id="editor"<?php //style='margin-top: 60px;padding: 10px;text-align: justify' ?> data-spy="scroll" data-target=".modal-header" data-offset="0" class="scrollspy-example" >
+                <?php echo $this->editting?$this->note->note_body:''?>
+            </div>
+        </div>
+        <div class="modal-footer" style='margin-top: -20px'>
+            <input type="submit" class="btn btn-primary" name="submit" style="opacity: 0.8" value="Save" />
+        </div>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+<?php
+    $type = substr($this->request->TYPE, 0, strlen($this->request->TYPE)-1);
+    if($type=='attache')$type = substr($type, 0, strlen($type)-1);
+    $type = $type=='htm'?'folder':$type;
+    if(isset($this->pid))
+        $pid = $this->pid;
+    else $pid = -1;
+    $action = '/'.str_replace("Action", "", $this->request->action);
+    if(strtolower($type)=='htm')$type='folder';
+     $uri = "";
+    if(strtolower($this->request->module)!="default")
+        $uri.="/{$this->request->module}";
+    if(strtolower($this->request->action)!="indexaction")
+        $uri.="$action";
+    if($pid != -1)
+        $uri .= "/directory/$pid";
+    if($action=='/'  || strtolower($action)=='/index') $action = '';
+    if(!isset($this->request->params['o'])) $this->request->params['o'] = 0; 
+    if(!isset($this->request->params['l'])) $this->request->params['l'] = 1; 
+
+    if(!User::IsLoggedIn()) throw new \iMVC\Exceptions\AccessDeniedException("You are not logged in!");
+    if(!User::GetInstance()->setting->GetSetting('has_blog_named')):
+    require 'helpers/pjs-scripts/create-blog.js.php'; 
+?>
+<script>
+    $(document).ready(function(){
+        CreateBlog();
+    });
+</script>
+<?php endif; ?>

@@ -1,0 +1,17 @@
+<?php
+    switch($this->type)
+    {
+        case "mini":
+            require 'login-versions/mini.php';
+            break;
+        case "info":
+            require 'login-versions/info.php';
+            break;
+        case "menu":
+            require 'login-versions/menu.php';
+            break;
+        default:
+            require 'login-versions/html.php';
+            break;
+    }
+?>

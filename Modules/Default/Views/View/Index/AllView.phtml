@@ -1,0 +1,7 @@
+<?php require 'type-tag-helper.phtml';?>
+<?php require 'helpers/pjs-scripts/delete-items.js.php'; ?>
+<?php require 'helpers/pjs-scripts/de-archive.js.php'; ?>
+<?php if(!isset($this->reloading) || !$this->reloading): ?>
+<?php require 'helpers/options/allitems/options.php'; ?>
+<?php endif; ?>
+<?php require 'helpers/index/file-loader.php';?>

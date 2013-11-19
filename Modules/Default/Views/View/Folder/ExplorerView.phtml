@@ -1,0 +1,11 @@
+<div class="tabbable tabs-left" >
+        <ul class="nav nav-tabs" style="width: 100%;">
+<?php
+                $uri = $this->request->requestURI;
+                $i = 0;
+                foreach ($this->list as $key => $value) : 
+?>
+                <li class="<?php echo $key ?><?php echo $key==$this->cwd?" active":""?>"><a href="/<?php echo $key ?>" data-toggle="itab" ><?php echo $value; ?></a></li>
+<?php $i++;endforeach;?>
+        </ul>
+</div> 

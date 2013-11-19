@@ -1,0 +1,10 @@
+# add this to apache vhost.conf files
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+	ServerName noteblog.local
+	DocumentRoot '/var/www/noteblog/public' 
+</VirtualHost>
+
+# add this to /etc/hosts
+# 127.0.0.1 noteblog.local
+

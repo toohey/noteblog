@@ -1,0 +1,35 @@
+<?php if(RUNNING_ENV == PRODUCTION): ?>
+<link href="/access/css/fuzzy-style.css" rel="stylesheet">
+<div id='fuzzy-env'></div>
+<div class='modal span8' id='fuzzy-content' style='left:15%;height: 50%;top:20%'>
+    <div class='modal-header '>
+        <b >Oops ...!</b>
+        <a class='btn btn-primary btn-danger pull-right' href='/' style='margin-top:-10px;'>Get Back</a>
+        <div class='clear'></div>
+    </div>
+    <div class='modal-body'>
+        <div style='font-weight: bolder;font-variant: small-caps' class='alert alert-block alert-error text-center'>
+            <?php
+                echo $this->error->getMessage();
+            ?>
+        </div>
+<?php else: ?>
+<div class="span11" style="margin: 10px auto 0 auto;">
+    <legend>Error Message</legend>
+    <?php iMVC\Tools\Debug::_var ( $this->error->getMessage()); ?>
+    <legend>Stack strace</legend>
+    <pre class='alert alert-block alert-info' style='color:#000'><?php echo method_exists($this->error,"GetErrorTraceAsString")?$this->error->GetErrorTraceAsString():$this->error->getTraceAsString(); ?></pre>
+<?php endif; if(RUNNING_ENV == PRODUCTION): ?>
+    <script>
+        $(document).ready(function(){
+           setTimeout(function(){window.location = '/<?php echo User::IsLoggedIn()?"":"public"?>';},2500); 
+        });
+    </script>
+    <legend></legend>
+    <blockquote style='font-variant: small-caps'>
+        The page will restart automatically, or you may redirect <a href='/'>now</a>.
+    </blockquote>
+</div>
+<?php endif; ?>
+    </div>
+</div>
